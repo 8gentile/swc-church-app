@@ -1,11 +1,7 @@
 import { memo } from 'react'
 
-import { TabPlaceholderScreen } from '~/features/church/TabPlaceholderScreen'
+import { AboutTabContent } from '~/features/church/about/AboutTabContent'
 
 export default memo(function AboutTabPage() {
-  return (
-    <TabPlaceholderScreen title="About">
-      Service times, description, and location from WordPress will load here (Ticket 04).
-    </TabPlaceholderScreen>
-  )
+  return <AboutTabContent />
 })

@@ -35,7 +35,7 @@ export const PasswordPage = () => {
         showError(error)
         return
       }
-      router.replace('/home')
+      router.replace('/home/feed')
     } catch (err) {
       console.error(err)
     } finally {

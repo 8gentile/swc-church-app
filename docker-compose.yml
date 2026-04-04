@@ -57,7 +57,7 @@ services:
     command: node migrate-dist.js
 
   zero:
-    image: "rocicorp/zero:${ZERO_VERSION:-error-run-bun-tko-run-env-update}"
+    image: "rocicorp/zero:${ZERO_VERSION:-0.26.2}"
     depends_on:
       migrate:
         condition: service_completed_successfully

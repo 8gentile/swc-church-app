@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Circle, isWeb, Spinner, XStack, YStack } from 'tamagui'
 
 import { APP_NAME } from '~/constants/app'
+import { authClient } from '~/features/auth/client/authClient'
 import { signInAsDemo } from '~/features/auth/client/signInAsDemo'
 import { isDemoMode } from '~/helpers/isDemoMode'
 import { Link } from '~/interface/app/Link'
@@ -15,9 +16,46 @@ import { showToast } from '~/interface/toast/helpers'
 
 export const LoginPage = () => {
   const [demoLoading, setDemoLoading] = useState<boolean>(false)
+  const [socialBusy, setSocialBusy] = useState<'google' | 'apple' | null>(null)
 
   const handleSocialLogin = async (provider: 'google' | 'apple') => {
-    showToast(`${provider} login coming soon!`, { type: 'info' })
+    setSocialBusy(provider)
+    try {
+      const origin = typeof window !== 'undefined' ? window.location.origin : ''
+      const callbackURL = `${origin}/home/feed`
+      const res = await authClient.signIn.social({
+        provider,
+        callbackURL,
+      })
+
+      if (res.error) {
+        const code =
+          res.error && typeof res.error === 'object' && 'code' in res.error
+            ? String((res.error as { code?: string }).code)
+            : ''
+        const message =
+          code === 'PROVIDER_NOT_FOUND'
+            ? 'Google or Apple sign-in is not configured on the server. Add GOOGLE_CLIENT_ID / GOOGLE_CLIENT_SECRET (and Apple keys if needed), or use Continue with Email.'
+            : ((res.error as { message?: string })?.message ?? 'Social sign-in failed')
+        showToast(message, { type: 'error' })
+        return
+      }
+
+      const url = (res.data as { url?: string } | undefined)?.url
+      if (typeof window !== 'undefined' && url) {
+        window.location.assign(url)
+      }
+    } catch (e) {
+      console.error(e)
+      showToast(
+        e instanceof Error
+          ? e.message
+          : 'Could not start social sign-in. Is the auth API running?',
+        { type: 'error' },
+      )
+    } finally {
+      setSocialBusy(null)
+    }
   }
 
   return (
@@ -25,7 +63,9 @@ export const LoginPage = () => {
       flex={1}
       justify="center"
       items="center"
-      $platform-web={{ minHeight: '100vh' }}
+      width="100%"
+      maxW="100%"
+      $platform-web={{ minHeight: '100dvh' }}
     >
       <Circle
         size={80}
@@ -91,7 +131,10 @@ export const LoginPage = () => {
                   const { error } = await signInAsDemo()
                   setDemoLoading(false)
                   if (error) {
-                    showToast('Demo login failed', { type: 'error' })
+                    const msg =
+                      (error as { message?: string })?.message ??
+                      'Demo login failed. Start Postgres and run the backend (e.g. bun backend) so /api/auth is available.'
+                    showToast(msg, { type: 'error' })
                     return
                   }
                   router.replace('/home/feed')
@@ -114,6 +157,7 @@ export const LoginPage = () => {
             <Button
               size="$5"
               onPress={() => handleSocialLogin('google')}
+              disabled={!!socialBusy}
               pressStyle={{
                 scale: 0.97,
                 bg: '$color2',
@@ -123,12 +167,19 @@ export const LoginPage = () => {
               }}
               transition="200ms"
               enterStyle={{ opacity: 0, scale: 0.95 }}
-              icon={<GoogleIcon size={18} />}
+              icon={
+                socialBusy === 'google' ? (
+                  <Spinner size="small" />
+                ) : (
+                  <GoogleIcon size={18} />
+                )
+              }
             />
 
             <Button
               size="$5"
               onPress={() => handleSocialLogin('apple')}
+              disabled={!!socialBusy}
               pressStyle={{
                 scale: 0.97,
                 bg: '$color2',
@@ -138,7 +189,13 @@ export const LoginPage = () => {
               }}
               transition="200ms"
               enterStyle={{ opacity: 0, scale: 0.95 }}
-              icon={<AppleIcon size={20} />}
+              icon={
+                socialBusy === 'apple' ? (
+                  <Spinner size="small" />
+                ) : (
+                  <AppleIcon size={20} />
+                )
+              }
             />
           </XStack>
         </YStack>

@@ -2,24 +2,7 @@
 // server-side query definitions with validators
 import { defineQuery, defineQueries } from '@rocicorp/zero'
 import * as v from 'valibot'
-
 import * as Queries from './groupedQueries'
-
-const todo = {
-  todosByUserId: defineQuery(
-    v.object({
-      userId: v.string(),
-      limit: v.optional(v.number()),
-    }),
-    ({ args }) => Queries.todo.todosByUserId(args),
-  ),
-  todoById: defineQuery(
-    v.object({
-      todoId: v.string(),
-    }),
-    ({ args }) => Queries.todo.todoById(args),
-  ),
-}
 
 const user = {
   userById: defineQuery(
@@ -37,6 +20,5 @@ const user = {
 }
 
 export const queries = defineQueries({
-  todo,
   user,
 })

@@ -7,27 +7,102 @@
 A full-stack, cross-platform starter kit for building modern web and mobile
 applications with React Native.
 
+## SWC Church App (this repository)
+
+This project builds the **Stroudsburg Wesleyan Church** app on top of Takeout Free—mostly as a **convenient universal shell** (Tamagui + One + React Native for web/iOS/Android). Product requirements, APIs, and phased work are in [`thoughts/prds/04-03-2026-swc-church-app-prd.md`](thoughts/prds/04-03-2026-swc-church-app-prd.md).
+
+**Church-specific config** (`YOUTUBE_*`, `WORDPRESS_*`, `ENGAGE_GIVE_URL`, etc.) lives in **`.env`** (gitignored) and **`.env.production.example`** — see PRD **§7.5** and **§16**.
+
+| From this template | Church prototype (MVP) | Keep for later scale |
+|--------------------|-------------------------|----------------------|
+| **Tamagui** | Primary UI / theming | Same — white-label per tenant |
+| **One** (`app/` routing) | Tab shell for Sermons / Events / About + Give | Same |
+| **React Native + web** | One codebase per PRD | Same |
+| **Better Auth**, `app/(app)/auth/*` | **Not used** — PRD: no user login | Accounts, saved content (**PRD §12**) |
+| **Zero**, **Drizzle**, Postgres, `bun backend` | **Not required** for client-side YouTube + WordPress | Sync, push, server-side Breeze, analytics |
+| **API routes** (`app/api/*`) | Optional; church data is mostly public HTTP APIs | Proxies, secrets, webhooks |
+
+Treat the full stack as **optional infrastructure**: the MVP does not need a backend for sermons or events, but leaving the template intact avoids rework if you add auth, notifications, or a real database later.
+
 ## Prerequisites
 
 Before you begin, ensure you have:
 
+- **Node.js** — **24.3.0** (see `package.json` `engines` and **`.nvmrc`**). The dev server (`one dev` → Rolldown) relies on Node’s `util.styleText()` with **array** style arguments; **Node 21 and older** fail at startup with  
+  `The argument 'format' must be one of: ... Received [ 'underline', 'gray' ]`.  
+  Use [fnm](https://github.com/Schniz/fnm) or [nvm](https://github.com/nvm-sh/nvm): `fnm install` / `nvm install` (reads `.nvmrc`), then `fnm use` / `nvm use`.  
+  **Check:** run `node -v` in the same terminal — it **must** print `v24.3.0`. If you still see `v21.x` (or anything other than 24.3.0), another `node` (often **Homebrew** `linuxbrew`/`homebrew`) is earlier on `PATH` than nvm; see **Troubleshooting** below.
 - **Bun** - [Install Bun](https://bun.sh)
 - **Docker** - [Install Docker](https://docs.docker.com/get-docker/) (on macOS,
   we recommend [OrbStack](https://orbstack.dev) as a faster alternative)
 - **Git** - For version control
 
-For mobile development:
+For **native** simulators/emulators later:
 
 - **iOS**: macOS with Xcode 16+
 - **Android**: Android Studio with JDK 17+
 
-## Quick Start
+## Daily dev (church app — recommended for now)
+
+Keep the loop small: **web + Chrome**, not emulators or WSL/Android wiring.
+
+1. **`bun install`** then **`bun dev`** (uses **`scripts/dev.sh`** so Node **24.3.0** wins over Homebrew — see Troubleshooting).
+2. Open the dev URL in **Google Chrome** (default is often **http://localhost:8092** — check the terminal).
+3. **Chrome DevTools** → **Toggle device toolbar** (Ctrl+Shift+M / Cmd+Shift+M) → pick a phone size or “Responsive” to approximate mobile layout and touch targets.
+
+That is enough for **layout, navigation, and most church flows** (YouTube/WordPress are HTTP from the browser). Add **`bun backend`** (Docker) only when you need the full Takeout stack (Zero, auth, DB).
+
+Real **iOS / Android** builds and device quirks can wait until you care; see **Mobile Apps** and **WSL + Android** below.
+
+## Quick Start (full template stack)
 
 ```bash
 bun install
-bun backend      # start docker services (postgres, zero)
-bun dev          # start web dev server at http://localhost:8092
+bun backend      # Docker: postgres + zero (skip until you need DB/sync)
+bun dev          # web dev server — often http://localhost:8092
 ```
+
+### Troubleshooting: `bun dev` fails with `styleText` / `Received [ 'underline', 'gray' ]`
+
+1. Run **`node -v`**. You need **`v24.3.0`**. If nvm says “Now using node v24.3.0” but **`node -v` still shows `v21.x`**, your shell is not using nvm’s Node (Homebrew or another install wins on `PATH`).
+
+2. Inspect order: **`which node`** and **`which -a node`**. The first entry should be under **`~/.nvm/versions/node/v24.3.0/bin/node`** (path varies slightly by OS).
+
+3. **Fix (pick one):**
+   - Load nvm **after** other PATH changes in **`~/.zshrc`**, or run **`hash -r`** after `nvm use`, then confirm `node -v` again.
+   - Temporarily **`brew unlink node`** (Linuxbrew/Homebrew) so nvm’s shim is first, or remove the brew `node` package if you rely on nvm.
+   - One-shot for this repo:  
+     `export PATH="$HOME/.nvm/versions/node/v24.3.0/bin:$PATH"`  
+     (adjust if your nvm root differs), then `node -v` and `bun dev`.
+
+4. **`bun dev` uses whatever `node` is first on `PATH`** when One/Rolldown starts — fixing `node -v` in that same terminal fixes the error.
+
+5. **This repo:** `bun dev` runs **`scripts/dev.sh`**, which prepends **`~/.nvm/versions/node/<.nvmrc>/bin`** to `PATH` when that Node exists, so **Homebrew’s `node` no longer wins** over nvm. After `bun install`, try **`bun dev`** again; you should see **`node -v` → v24.3.0** if you run `node -v` from a subshell started by the same pattern (or trust the script).
+
+### Optional: WSL + Android SDK on Windows (only if you use `oa` / emulator from WSL)
+
+Expo / Metro in **WSL** need **`adb`**, but the Android SDK lives on **Windows** under `C:\Users\<WindowsUser>\AppData\Local\Android\Sdk`, and **`adb.exe`** is not named `adb` (Node spawns `adb` → **ENOENT**).
+
+1. On **Windows**, install [Android Studio](https://developer.android.com/studio), open **SDK Manager**, and install **Android SDK Platform-Tools** (and create an **AVD** / emulator if you use one).
+
+2. In the repo, copy **`.env.wsl.example`** → **`.env.wsl.local`** and set **`WSL_WINDOWS_USER`** to your **Windows** profile name (the `C:\Users\<name>` segment — often **not** the same as Linux `whoami`).
+
+3. In **every WSL shell** where you run **`bun dev`** or press **`oa`** (open Android), load the bridge **before** dev:
+
+   ```bash
+   cd ~/src/swc-church-app   # your clone path
+   source scripts/wsl-android-env.sh
+   adb version
+   adb devices
+   ```
+
+4. Add to **`~/.zshrc`** (optional, adjust path):
+
+   ```bash
+   source ~/src/swc-church-app/scripts/wsl-android-env.sh
+   ```
+
+5. If **`adb devices`** is still empty while an emulator runs on Windows, use a **Windows** terminal (PowerShell / Windows Terminal) in the project for **`bun dev`** + **`oa`**, or follow [Expo’s Android + WSL notes](https://docs.expo.dev/workflow/android-studio-emulator/) and WSL2/adb networking guides — the reliable path is often **dev server on Windows** when the emulator is on Windows.
 
 ## Stack
 
@@ -144,6 +219,8 @@ See `.env.production.example` for complete production configuration.
 
 ## Mobile Apps
 
+For day-to-day **church UI** work, prefer **web + Chrome device mode** (see **Daily dev** above). Use native targets when you need real device behavior or store builds.
+
 ### iOS
 
 ```bash
@@ -158,7 +235,7 @@ Requires macOS, Xcode 16+, and iOS 17.0+ deployment target.
 bun android      # run in emulator
 ```
 
-Requires Android Studio, JDK 17+, and Android SDK 34+.
+Requires Android Studio, JDK 17+, and Android SDK 34+. On **WSL**, see **Optional: WSL + Android** above.
 
 ## Adding Features
 

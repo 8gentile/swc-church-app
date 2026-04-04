@@ -2,7 +2,7 @@ import { eq } from 'drizzle-orm'
 
 import { getDb } from '~/database'
 import { user as userTable } from '~/database/schema-private'
-import { todo, userPublic, userState } from '~/database/schema-public'
+import { userPublic, userState } from '~/database/schema-public'
 
 import type { AuthData } from '~/features/auth/types'
 
@@ -76,9 +76,6 @@ async function deleteAccount(userId: string) {
   const db = getDb()
 
   try {
-    // delete all user's todos
-    await db.delete(todo).where(eq(todo.userId, userId))
-
     // delete user state
     await db.delete(userState).where(eq(userState.userId, userId))
 

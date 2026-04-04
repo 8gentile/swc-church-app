@@ -8,12 +8,20 @@ type Result =
     }
 
 /**
- * Login with email and password.
+ * Sign in or sign up with email and password.
+ *
+ * Uses `sign-up/email`: the server handler turns an existing-user sign-up (422) into
+ * `sign-in/email`, so one call covers both new accounts and returning users.
  */
 export async function passwordLogin(email: string, password: string): Promise<Result> {
-  const { error } = await authClient.signIn.email({
-    email,
+  const normalizedEmail = email.trim().toLowerCase()
+  const localPart = normalizedEmail.split('@')[0]?.trim()
+  const name = localPart && localPart.length > 0 ? localPart : 'User'
+
+  const { error } = await authClient.signUp.email({
+    email: normalizedEmail,
     password,
+    name,
   })
 
   if (!error) {

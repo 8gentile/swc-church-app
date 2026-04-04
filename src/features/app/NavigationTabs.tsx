@@ -47,7 +47,7 @@ export function NavigationTabs() {
   const onGivePress = () => {
     const url = getEngageGiveUrl()
     if (!url) {
-      showToast('Set VITE_ENGAGE_GIVE_URL in your environment to enable giving.', { type: 'error' })
+      showToast('Set ENGAGE_GIVE_URL in your environment to enable giving.', { type: 'error' })
       return
     }
     void openExternalUrl(url).catch(() => {

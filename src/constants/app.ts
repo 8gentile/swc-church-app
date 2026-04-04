@@ -1,6 +1,6 @@
 import { getChurchDisplayName } from '~/config/churchEnv'
 
-// Brand (VITE_CHURCH_DISPLAY_NAME — see `src/config/churchEnv.ts`)
+// Brand (`CHURCH_DISPLAY_NAME` — see `src/config/churchEnv.ts`)
 export const APP_NAME = getChurchDisplayName()
 export const APP_NAME_LOWERCASE = 'swc-church-app'
 

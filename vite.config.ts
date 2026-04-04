@@ -5,6 +5,13 @@ import { visualizer } from 'rollup-plugin-visualizer'
 import type { UserConfig } from 'vite'
 
 export default {
+  /**
+   * Default Vite exposes only `VITE_*` to `import.meta.env`. Church app vars follow the PRD
+   * names (`ENGAGE_GIVE_URL`, `YOUTUBE_*`, `WORDPRESS_*`, `CHURCH_*`) — add prefixes here so
+   * `src/config/churchEnv.ts` can read a single name per concern (no duplicate VITE_ aliases).
+   */
+  envPrefix: ['VITE_', 'ENGAGE_', 'YOUTUBE_', 'WORDPRESS_', 'CHURCH_'],
+
   server: {
     allowedHosts: ['host.docker.internal'],
   },

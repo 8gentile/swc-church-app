@@ -64,14 +64,26 @@ declare module 'one' {
         | `/home/settings/edit-profile`
       DynamicRoutes: 
         | `/(app)/auth/signup/${OneRouter.SingleRoutePart<T>}`
+        | `/(app)/home/(tabs)/sermons/${OneRouter.SingleRoutePart<T>}`
+        | `/(app)/home/sermons/${OneRouter.SingleRoutePart<T>}`
         | `/auth/signup/${OneRouter.SingleRoutePart<T>}`
+        | `/home/(tabs)/sermons/${OneRouter.SingleRoutePart<T>}`
+        | `/home/sermons/${OneRouter.SingleRoutePart<T>}`
       DynamicRouteTemplate: 
         | `/(app)/auth/signup/[method]`
+        | `/(app)/home/(tabs)/sermons/[videoId]`
+        | `/(app)/home/sermons/[videoId]`
         | `/auth/signup/[method]`
+        | `/home/(tabs)/sermons/[videoId]`
+        | `/home/sermons/[videoId]`
       IsTyped: true
       RouteTypes: {
         '/(app)/auth/signup/[method]': RouteInfo<{ method: string }>
+        '/(app)/home/(tabs)/sermons/[videoId]': RouteInfo<{ videoId: string }>
+        '/(app)/home/sermons/[videoId]': RouteInfo<{ videoId: string }>
         '/auth/signup/[method]': RouteInfo<{ method: string }>
+        '/home/(tabs)/sermons/[videoId]': RouteInfo<{ videoId: string }>
+        '/home/sermons/[videoId]': RouteInfo<{ videoId: string }>
       }
     }
   }

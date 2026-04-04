@@ -1,4 +1,4 @@
-import { Link } from 'one'
+import { router } from 'one'
 import { useEffect, useMemo, useState } from 'react'
 import { FlatList, RefreshControl } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
@@ -46,31 +46,38 @@ function SermonRow({ item }: { item: YouTubePlaylistItem }) {
     item.snippet.thumbnails?.default?.url
 
   return (
-    <Link href={`/home/sermons/${videoId}`}>
-      <Pressable py="$3" px="$2" rounded="$4" hoverStyle={{ bg: '$color3' }} pressStyle={{ bg: '$color4' }}>
-        <XStack gap="$3" width="100%" items="flex-start">
-          {thumb ? (
-            <Image
-              source={{ uri: thumb }}
-              width={120}
-              height={68}
-              rounded="$2"
-              alt=""
-            />
-          ) : (
-            <YStack width={120} height={68} bg="$color4" rounded="$2" />
-          )}
-          <YStack flex={1} gap="$1">
-            <H3 size="$3" fontWeight="600" numberOfLines={3}>
-              {item.snippet.title}
-            </H3>
-            <SizableText size="$2" color="$color10">
-              {formatPublishedAt(item.snippet.publishedAt)}
-            </SizableText>
-          </YStack>
-        </XStack>
-      </Pressable>
-    </Link>
+    <Pressable
+      py="$3"
+      px="$2"
+      rounded="$4"
+      cursor="pointer"
+      hoverStyle={{ bg: '$color3' }}
+      pressStyle={{ bg: '$color4' }}
+      onPress={() => router.push(`/home/sermons/${videoId}`)}
+    >
+      <XStack gap="$3" width="100%" items="flex-start">
+        {thumb ? (
+          <Image
+            src={thumb}
+            width={120}
+            height={68}
+            rounded="$2"
+            objectFit="cover"
+            alt=""
+          />
+        ) : (
+          <YStack width={120} height={68} bg="$color4" rounded="$2" />
+        )}
+        <YStack flex={1} gap="$1">
+          <H3 size="$3" fontWeight="600" numberOfLines={3}>
+            {item.snippet.title}
+          </H3>
+          <SizableText size="$2" color="$color10">
+            {formatPublishedAt(item.snippet.publishedAt)}
+          </SizableText>
+        </YStack>
+      </XStack>
+    </Pressable>
   )
 }
 
@@ -94,11 +101,9 @@ export function SermonsTabContent() {
               Join Sunday Service
             </SizableText>
           </YStack>
-          <Link href={`/home/sermons/${liveVideoId}`}>
-            <Button size="$3" theme="blue">
-              Watch live
-            </Button>
-          </Link>
+          <Button size="$3" theme="blue" onPress={() => router.push(`/home/sermons/${liveVideoId}`)}>
+            Watch live
+          </Button>
         </XStack>
       </YStack>
     )

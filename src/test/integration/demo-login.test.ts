@@ -19,8 +19,8 @@ test('demo login flow completes successfully', async ({ page }) => {
   // perform demo login
   await loginAsDemo(page)
 
-  // verify we're on the home feed page
-  expect(page.url()).toContain('/home/feed')
+  // verify we're on the sermons tab (home)
+  expect(page.url()).toContain('/home/sermons')
 
   // verify the page has rendered (app container visible)
   await expect(page.locator('[data-testid="app-container"]')).toBeAttached({
@@ -43,14 +43,14 @@ test('authenticated user can access settings', async ({ page }) => {
   })
 })
 
-test('demo login shows home feed content', async ({ page }) => {
+test('demo login shows sermons tab content', async ({ page }) => {
   test.setTimeout(45000)
 
   // perform demo login
   await loginAsDemo(page)
 
-  // verify we're on home/feed
-  expect(page.url()).toContain('/home/feed')
+  // verify we're on home/sermons
+  expect(page.url()).toContain('/home/sermons')
 
   // verify the app container is visible (page loaded)
   await expect(page.locator('[data-testid="app-container"]')).toBeAttached({

@@ -13,11 +13,24 @@ declare module 'one' {
         | `/(app)/auth/login`
         | `/(app)/auth/login/password`
         | `/(app)/home`
+        | `/(app)/home/`
         | `/(app)/home/(tabs)`
+        | `/(app)/home/(tabs)/about`
+        | `/(app)/home/(tabs)/about/`
+        | `/(app)/home/(tabs)/events`
+        | `/(app)/home/(tabs)/events/`
         | `/(app)/home/(tabs)/feed`
         | `/(app)/home/(tabs)/feed/`
+        | `/(app)/home/(tabs)/sermons`
+        | `/(app)/home/(tabs)/sermons/`
+        | `/(app)/home/about`
+        | `/(app)/home/about/`
+        | `/(app)/home/events`
+        | `/(app)/home/events/`
         | `/(app)/home/feed`
         | `/(app)/home/feed/`
+        | `/(app)/home/sermons`
+        | `/(app)/home/sermons/`
         | `/(app)/home/settings`
         | `/(app)/home/settings/`
         | `/(app)/home/settings/blocked-users`
@@ -27,11 +40,24 @@ declare module 'one' {
         | `/auth/login`
         | `/auth/login/password`
         | `/home`
+        | `/home/`
         | `/home/(tabs)`
+        | `/home/(tabs)/about`
+        | `/home/(tabs)/about/`
+        | `/home/(tabs)/events`
+        | `/home/(tabs)/events/`
         | `/home/(tabs)/feed`
         | `/home/(tabs)/feed/`
+        | `/home/(tabs)/sermons`
+        | `/home/(tabs)/sermons/`
+        | `/home/about`
+        | `/home/about/`
+        | `/home/events`
+        | `/home/events/`
         | `/home/feed`
         | `/home/feed/`
+        | `/home/sermons`
+        | `/home/sermons/`
         | `/home/settings`
         | `/home/settings/`
         | `/home/settings/blocked-users`

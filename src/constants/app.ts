@@ -1,6 +1,8 @@
-// Brand
-export const APP_NAME = 'Takeout'
-export const APP_NAME_LOWERCASE = 'takeout'
+import { getChurchDisplayName } from '~/config/churchEnv'
+
+// Brand (VITE_CHURCH_DISPLAY_NAME — see `src/config/churchEnv.ts`)
+export const APP_NAME = getChurchDisplayName()
+export const APP_NAME_LOWERCASE = 'swc-church-app'
 
 // Domain
 export const DOMAIN = 'takeout.tamagui.dev'

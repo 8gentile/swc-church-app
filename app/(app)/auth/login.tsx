@@ -22,7 +22,7 @@ export const LoginPage = () => {
     setSocialBusy(provider)
     try {
       const origin = typeof window !== 'undefined' ? window.location.origin : ''
-      const callbackURL = `${origin}/home/feed`
+      const callbackURL = `${origin}/home/sermons`
       const res = await authClient.signIn.social({
         provider,
         callbackURL,
@@ -137,7 +137,7 @@ export const LoginPage = () => {
                     showToast(msg, { type: 'error' })
                     return
                   }
-                  router.replace('/home/feed')
+                  router.replace('/home/sermons')
                 }}
                 disabled={demoLoading}
                 width="100%"

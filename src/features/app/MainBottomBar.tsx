@@ -3,7 +3,6 @@ import { isWeb, XStack, YStack } from 'tamagui'
 
 import { PageContainer } from '~/interface/layout/PageContainer'
 
-import { MainHeaderMenu } from './MainHeader'
 import { NavigationTabs } from './NavigationTabs'
 
 /** Total chrome height for padding scroll areas when the bar is fixed (web). */
@@ -33,15 +32,12 @@ export function MainBottomBar() {
         <XStack
           width="100%"
           items="center"
-          justify="space-between"
+          justify="center"
           py="$2"
-          px="$1"
+          px="$2"
           height={MAIN_BOTTOM_BAR_BASE_HEIGHT}
         >
-          <XStack flex={1} items="center" justify="center">
-            <NavigationTabs />
-          </XStack>
-          <MainHeaderMenu />
+          <NavigationTabs />
         </XStack>
       </PageContainer>
     </YStack>

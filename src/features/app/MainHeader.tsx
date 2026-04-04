@@ -1,39 +1,38 @@
 import { router } from 'one'
-import { memo, useState } from 'react'
+import { memo } from 'react'
 import { H3, Separator, Sheet, XStack, YStack } from 'tamagui'
 
 import { useLogout } from '~/features/auth/useLogout'
 import { Logo } from '~/interface/app/Logo'
-import { Button } from '~/interface/buttons/Button'
 import { DoorIcon } from '~/interface/icons/phosphor/DoorIcon'
 import { GearIcon } from '~/interface/icons/phosphor/GearIcon'
-import { ListIcon } from '~/interface/icons/phosphor/ListIcon'
 import { ThemeSwitch } from '~/interface/theme/ThemeSwitch'
 
 import { useAuth } from '~/features/auth/client/authClient'
 import { Avatar } from '~/interface/avatars/Avatar'
 
-export const MainHeaderMenu = memo(() => {
+import type { ReactNode } from 'react'
+
+type MainHeaderMenuProps = {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  trigger: ReactNode
+}
+
+export const MainHeaderMenu = memo(({ open, onOpenChange, trigger }: MainHeaderMenuProps) => {
   const { user } = useAuth()
-  const [open, setOpen] = useState(false)
   const { logout } = useLogout()
 
   const handleLogout = () => {
     void logout()
-    setOpen(false)
+    onOpenChange(false)
   }
   return (
     <>
-      <Button
-        variant="transparent"
-        circular
-        icon={<ListIcon size="$1" />}
-        aria-label="Menu"
-        onPress={() => setOpen(true)}
-      />
+      {trigger}
       <Sheet
         open={open}
-        onOpenChange={setOpen}
+        onOpenChange={onOpenChange}
         transition="medium"
         modal
         dismissOnSnapToBottom
@@ -66,7 +65,7 @@ export const MainHeaderMenu = memo(() => {
                 pressStyle={{ bg: '$color4' }}
                 cursor="pointer"
                 onPress={() => {
-                  setOpen(false)
+                  onOpenChange(false)
                   router.push('/home/settings')
                 }}
               >

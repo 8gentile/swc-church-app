@@ -4,17 +4,17 @@ import { getChurchDisplayName } from '~/config/churchEnv'
 export const APP_NAME = getChurchDisplayName()
 export const APP_NAME_LOWERCASE = 'swc-church-app'
 
-// Domain
-export const DOMAIN = 'takeout.tamagui.dev'
+// Domain (update when deploying to a real domain)
+export const DOMAIN = 'stroudsburgwesleyan.org'
 
 // Social
-export const TWITTER_URL = 'https://x.com/tamagui__js'
-export const GITHUB_URL = 'https://github.com/tamagui'
+export const FACEBOOK_URL = 'https://www.facebook.com/groups/stroudsburgwesleyan'
+export const YOUTUBE_URL = 'https://www.youtube.com/@stroudsburgwesleyanchurch8704'
 
 // Email
 export const ADMIN_EMAIL = `admin@${DOMAIN}`
 
-// Demo user (for takeout demo site)
+// Demo user (template — not used in church app MVP)
 export const DEMO_EMAIL = `demo@${DOMAIN}`
 export const DEMO_PASSWORD = 'demopassword123'
 export const DEMO_NAME = 'Demo User'

@@ -117,23 +117,28 @@ At a high level, the primary technologies used are:
 ## Project Structure
 
 ```
-takeout-free/
+swc-church-app/
 ├── app/                   # File-based routing (One router)
-│   ├── (app)/             # Authenticated routes
-│   │   ├── auth/          # Login flows
-│   │   └── home/          # Main app tabs
-│   └── api/               # API routes
+│   ├── (app)/
+│   │   └── home/(tabs)/   # Bottom-tab shell
+│   │       ├── sermons/   # YouTube sermon list + player
+│   │       ├── events/    # Breeze calendar embed
+│   │       ├── about/     # WordPress service times + church info
+│   │       └── ...        # Give = external link (no screen)
+│   └── api/               # API routes (template — not used in MVP)
 ├── src/
-│   ├── features/          # Feature modules (auth, todo, theme)
+│   ├── config/            # churchEnv.ts — tenant env var accessors
+│   ├── features/
+│   │   └── church/        # Church-specific modules
+│   │       ├── sermons/   # SermonsTabContent, sermon list UI
+│   │       ├── events/    # EventsTabContent, calendar embed
+│   │       ├── about/     # AboutTabContent, WP page rendering
+│   │       ├── youtube/   # YouTube API client, hooks, player
+│   │       └── wordpress/ # WordPress API client, HTML helpers
 │   ├── interface/         # Reusable UI components
-│   ├── database/          # Database schema and migrations
-│   ├── data/              # Zero schema, models, and queries
-│   ├── zero/              # Real-time sync configuration
-│   ├── server/            # Server-side code
 │   └── tamagui/           # Theme configuration
-├── scripts/               # CI/CD and helper scripts
-├── docs/                  # Documentation
-└── assets/                # Images, fonts, splash screens
+├── thoughts/              # PRDs, design docs, tickets, plans
+└── scripts/               # Dev helpers (nvm wrapper, WSL bridge)
 ```
 
 ## Common Commands
@@ -194,25 +199,27 @@ bun migrate
 - `.env.production` - Production config (gitignored)
 - `.env.production.example` - Production template (committed)
 
-### Key Variables
+### Church App Variables (client-side, via `vite.config.ts` envPrefix)
+
+| Variable | Tab | Required | Description |
+|----------|-----|----------|-------------|
+| `CHURCH_DISPLAY_NAME` | All | No | App title (defaults to "Stroudsburg Wesleyan Church") |
+| `ENGAGE_GIVE_URL` | Give | Yes | CDM+ Engage giving portal URL (opens in system browser) |
+| `YOUTUBE_API_KEY` | Sermons | Yes | Google Cloud API key (restrict to YouTube Data API v3) |
+| `YOUTUBE_CHANNEL_ID` | Sermons | Yes | YouTube channel ID for sermon uploads + live streams |
+| `WORDPRESS_ORIGIN` | Events, About | Yes | WordPress site base URL (e.g. `https://www.stroudsburgwesleyan.org`) |
+| `WORDPRESS_EVENTS_PAGE_ID` | Events | Yes | WP page ID containing Breeze calendar embeds |
+| `WORDPRESS_ABOUT_PAGE_ID` | About | Yes* | WP page ID for service times / about content |
+| `WORDPRESS_ABOUT_PAGE_SLUG` | About | Alt* | Alternative: WP page slug instead of ID |
+
+\* Provide either `WORDPRESS_ABOUT_PAGE_ID` or `WORDPRESS_ABOUT_PAGE_SLUG`.
+
+### Infrastructure Variables (template — not needed for church MVP)
 
 ```bash
-# authentication
-BETTER_AUTH_SECRET=<secret>
-BETTER_AUTH_URL=<url>
-
-# server
-ONE_SERVER_URL=<url>
-
-# zero
-ZERO_UPSTREAM_DB=<connection-string>
-ZERO_CVR_DB=<connection-string>
-ZERO_CHANGE_DB=<connection-string>
-
-# storage (S3/R2)
-CLOUDFLARE_R2_ENDPOINT=<endpoint>
-CLOUDFLARE_R2_ACCESS_KEY=<key>
-CLOUDFLARE_R2_SECRET_KEY=<secret>
+BETTER_AUTH_SECRET=<secret>     # only if using auth
+ONE_SERVER_URL=<url>            # only if deploying server
+ZERO_UPSTREAM_DB=<conn-string>  # only if using Zero sync
 ```
 
 See `.env.production.example` for complete production configuration.

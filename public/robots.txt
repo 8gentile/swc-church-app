@@ -12,4 +12,4 @@ Disallow: /avatar-setup
 Disallow: /profile-setup
 Disallow: /waiting-list
 
-Sitemap: https://takeout.chat/sitemap.xml
+Sitemap: https://stroudsburgwesleyan.org/sitemap.xml

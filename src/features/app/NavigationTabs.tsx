@@ -29,6 +29,8 @@ const routes: TabRoute[] = [
 ]
 
 const ICON_SIZE = 22
+const INACTIVE_COLOR = '$blue10'
+const ACTIVE_COLOR = '$blue11'
 
 export function NavigationTabs() {
   const pathname = usePathname()
@@ -50,26 +52,38 @@ export function NavigationTabs() {
   }
 
   return (
-    <XStack flex={1} maxW={500} mx="auto" width="100%" items="center" justify="space-evenly">
+    <XStack flex={1} width="100%" items="center" justify="space-evenly">
       {routes.map((route) => {
         if (route.kind === 'give') {
           const Icon = route.icon
           return (
             <Pressable
               key={route.name}
-              py="$1.5"
-              px="$2"
               items="center"
               justify="center"
               aria-label={route.label}
               onPress={onGivePress}
+              mt={-12}
             >
-              <YStack items="center" gap="$1">
-                <Icon size={ICON_SIZE} color="$color10" />
-                <SizableText size="$1" fontWeight="500" color="$color10">
-                  {route.label}
-                </SizableText>
+              <YStack
+                items="center"
+                justify="center"
+                bg="$blue9"
+                width={52}
+                height={52}
+                rounded={26}
+                elevation="$3"
+                $platform-web={{
+                  boxShadow: '0 2px 12px rgba(59, 130, 246, 0.35)',
+                }}
+                hoverStyle={{ bg: '$blue10' }}
+                pressStyle={{ scale: 0.95, bg: '$blue10' }}
+              >
+                <Icon size={26} color="white" />
               </YStack>
+              <SizableText size="$1" fontWeight="600" color="$blue10" mt="$1">
+                {route.label}
+              </SizableText>
             </Pressable>
           )
         }
@@ -91,8 +105,8 @@ export function NavigationTabs() {
                   onPress={() => setMenuOpen(true)}
                 >
                   <YStack items="center" gap="$1">
-                    <Icon size={ICON_SIZE} color="$color10" />
-                    <SizableText size="$1" fontWeight="500" color="$color10">
+                    <Icon size={ICON_SIZE} color={INACTIVE_COLOR} />
+                    <SizableText size="$1" fontWeight="500" color={INACTIVE_COLOR}>
                       {route.label}
                     </SizableText>
                   </YStack>
@@ -112,16 +126,16 @@ export function NavigationTabs() {
               rounded="$3"
               items="center"
               justify="center"
-              bg={isActive ? '$color3' : 'transparent'}
-              hoverStyle={{ bg: '$color2' }}
+              bg={isActive ? '$blue3' : 'transparent'}
+              hoverStyle={{ bg: '$blue2' }}
               aria-label={route.label}
             >
               <YStack items="center" gap="$1">
-                <Icon size={ICON_SIZE} color={isActive ? '$color12' : '$color10'} />
+                <Icon size={ICON_SIZE} color={isActive ? ACTIVE_COLOR : INACTIVE_COLOR} />
                 <SizableText
                   size="$1"
                   fontWeight={isActive ? '600' : '500'}
-                  color={isActive ? '$color12' : '$color10'}
+                  color={isActive ? ACTIVE_COLOR : INACTIVE_COLOR}
                 >
                   {route.label}
                 </SizableText>

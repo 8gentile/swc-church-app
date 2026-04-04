@@ -1,3 +1,5 @@
+import path from 'node:path'
+
 import { tamaguiPlugin } from '@tamagui/vite-plugin'
 import { one } from 'one/vite'
 import { visualizer } from 'rollup-plugin-visualizer'
@@ -5,6 +7,14 @@ import { visualizer } from 'rollup-plugin-visualizer'
 import type { UserConfig } from 'vite'
 
 export default {
+  resolve: {
+    alias: {
+      // react-native-web-webview ships a .html file that Rolldown tries to parse as JS.
+      // We never use it on web (SermonYoutubePlayer renders a plain <iframe> on web).
+      'react-native-web-webview': path.resolve(__dirname, 'src/features/church/youtube/webviewStub.ts'),
+    },
+  },
+
   /**
    * Default Vite exposes only `VITE_*` to `import.meta.env`. Church app vars follow the PRD
    * names (`ENGAGE_GIVE_URL`, `YOUTUBE_*`, `WORDPRESS_*`, `CHURCH_*`) — add prefixes here so
@@ -18,7 +28,7 @@ export default {
 
   optimizeDeps: {
     include: ['async-retry'],
-    exclude: ['oxc-parser'],
+    exclude: ['oxc-parser', 'react-native-web-webview'],
   },
 
   ssr: {

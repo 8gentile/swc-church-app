@@ -11,7 +11,6 @@ COPY --from=bun-base /usr/local/bin/bunx /usr/local/bin/bunx
 WORKDIR /app
 
 COPY package.json bun.lock ./
-COPY packages ./packages
 
 # skip postinstall during docker build (it's dev-only setup)
 RUN bun install --ignore-scripts

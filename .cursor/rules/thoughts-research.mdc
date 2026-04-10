@@ -1,0 +1,40 @@
+---
+description: Format and conventions for research docs in thoughts/research/
+globs: thoughts/research/**
+alwaysApply: false
+---
+
+# Research doc conventions
+
+## Purpose
+
+Research docs capture exploratory work: API evaluations, technology spikes, competitive analysis, feasibility studies. They inform PRDs but are not PRDs themselves.
+
+## File naming
+
+`MM-DD-YYYY-topic.md` (e.g. `04-10-2026-youtube-api-quota-analysis.md`)
+
+## Required structure
+
+```markdown
+# Research: [descriptive title]
+
+**Date:** Month DD, YYYY
+**Author:** Name
+**Status:** In Progress | Complete
+**Informs:** [PRD](../prds/...) or "TBD"
+
+---
+
+## Question / Objective
+## Findings
+## Recommendations
+## Open Questions / Next Steps
+```
+
+**Key rules:**
+- Start with a clear **question or objective** the research answers
+- **Findings** should be evidence-based (links, data, code samples)
+- End with actionable **recommendations** and what to do next
+- Link to the PRD this research informs (or note "TBD" if the PRD doesn't exist yet)
+- When research concludes, update the linked PRD with relevant findings

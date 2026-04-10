@@ -1,0 +1,72 @@
+---
+description: Workflow for managing project thoughts — PRDs, designs, plans, tickets, and research
+alwaysApply: true
+---
+
+# Thoughts workflow
+
+All project thinking lives in `thoughts/`. When a conversation surfaces a unit of work, route it to the right artifact type **before** writing code.
+
+## Directory map
+
+| Directory | Purpose | When to create |
+|-----------|---------|---------------|
+| `thoughts/research/` | Exploratory investigations, spikes, competitive analysis, API evaluations | When you need to learn something before you can write a PRD |
+| `thoughts/prds/` | Product requirements — the *what* and *why* | When a feature or initiative is defined enough to spec |
+| `thoughts/designs/` | UX/UI layout, interaction, and component design | After a PRD exists; before writing a technical plan |
+| `thoughts/plans/` | Technical implementation plans — the *how* | After PRD **and** design (if applicable) exist |
+| `thoughts/tickets/` | Ordered, implementable work items | After a plan exists to derive them from |
+
+## Dependency chain (state machine)
+
+```
+research (optional)
+    ↓
+  PRD (required before plan)
+    ↓
+  design (required before plan, when the PRD has UX surface)
+    ↓
+  plan (required before tickets)
+    ↓
+  tickets → implementation
+```
+
+**Hard rules:**
+1. Never write a **plan** without a PRD to reference. If no PRD exists, write one first.
+2. Never write a **plan** for a PRD that has UX/UI surface without a **design** to reference. Create the design first.
+3. Never create **tickets** without a plan. Tickets are derived from plans.
+4. **Research** is optional — use it when you need to investigate before you can confidently write a PRD.
+
+## When a new thought is needed
+
+During a conversation, if you recognize any of these signals, pause and create the right artifact:
+
+- "We should build X" → check for a PRD; if missing, draft one in `thoughts/prds/`
+- "How should X look/work for the user?" → check for a design; if missing, draft one in `thoughts/designs/`
+- "How do we implement X?" → check for a plan; if missing, ensure PRD + design exist first, then draft in `thoughts/plans/`
+- "What are the tasks?" → check for tickets; if missing, derive from the plan in `thoughts/tickets/`
+- "I'm not sure which approach / library / API" → draft research in `thoughts/research/`
+
+## Cross-referencing
+
+Every artifact **must** link to its upstream dependencies using relative paths:
+- Plans link to their PRD and design: `[PRD](../prds/MM-DD-YYYY-topic-prd.md)`, `[Design](../designs/MM-DD-YYYY-topic.md)`
+- Designs link to their PRD
+- Tickets link to their plan, PRD, and design
+- Research can link to the PRD it informs (or vice versa)
+
+## Naming convention
+
+All files: `MM-DD-YYYY-kebab-case-topic[-suffix].md`
+- PRDs: `MM-DD-YYYY-topic-prd.md`
+- Designs: `MM-DD-YYYY-topic.md`
+- Plans: `MM-DD-YYYY-topic-technical-plan.md`
+- Tickets: `NN-kebab-summary.md` (numbered, with a `README.md` index)
+- Research: `MM-DD-YYYY-topic.md`
+
+## Before writing code
+
+When starting implementation work, always check `thoughts/` for relevant context:
+1. Find the ticket (or plan) that covers the work
+2. Read the linked PRD and design for product intent
+3. Follow the plan's phasing and architecture decisions

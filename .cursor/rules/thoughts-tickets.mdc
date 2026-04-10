@@ -1,0 +1,55 @@
+---
+description: Format and conventions for tickets in thoughts/tickets/
+globs: thoughts/tickets/**
+alwaysApply: false
+---
+
+# Ticket conventions
+
+## Prerequisite
+
+Tickets are derived from a technical plan in `thoughts/plans/`. Never create tickets without a plan.
+
+## File naming
+
+- Index: `README.md` — table mapping order → file → focus
+- Tickets: `NN-kebab-summary.md` (zero-padded number, e.g. `01-shell-navigation.md`)
+
+## README.md structure
+
+```markdown
+# Implementation tickets (topic)
+
+Ordered work items derived from [`../plans/MM-DD-YYYY-topic-technical-plan.md`](../plans/...).
+
+| Order | Ticket | Focus |
+|------:|--------|-------|
+| 1 | [`01-slug.md`](01-slug.md) | Brief focus description |
+```
+
+## Ticket structure
+
+```markdown
+# Ticket NN — Short title
+
+**Status:** Draft | In Progress | Done
+**Depends on:** ticket number or "—"
+**Plan:** [link](../plans/...)
+**PRD:** [link](../prds/...) §sections
+**Design:** [link](../designs/...)
+
+## Summary
+## Scope
+## Out of scope (later tickets)
+## Acceptance criteria
+- [ ] Checkboxes for each criterion
+## Estimate
+**S** | **M** | **L**
+```
+
+**Key rules:**
+- Every ticket links back to its plan, PRD, and design with relative paths
+- Reference specific PRD sections with § notation
+- Acceptance criteria use `- [ ]` checkboxes
+- Keep scope tight — one demoable unit of work per ticket
+- Note dependencies between tickets explicitly

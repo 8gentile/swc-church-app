@@ -1,0 +1,49 @@
+---
+description: Format and conventions for technical plans in thoughts/plans/
+globs: thoughts/plans/**
+alwaysApply: false
+---
+
+# Technical plan conventions
+
+## Prerequisites
+
+A plan **must** reference:
+1. An existing PRD in `thoughts/prds/` (always required)
+2. An existing design in `thoughts/designs/` (required when the PRD has UX surface)
+
+If either is missing, create it first — do not write the plan without upstream docs.
+
+## File naming
+
+`MM-DD-YYYY-topic-technical-plan.md`
+
+## Required structure
+
+```markdown
+# Technical plan: [descriptive title]
+
+**Purpose:** Single-sentence purpose linking to:
+- Product: [PRD](../prds/MM-DD-YYYY-topic-prd.md)
+- Shell UX: [Design](../designs/MM-DD-YYYY-topic.md)
+
+---
+
+## 1. Goals and success criteria
+## 2. Current repository state (audit)
+## 3. Architecture decisions
+## 4. Phased execution plan (ordered work)
+## 5. Configuration and secrets
+## 6. Testing strategy
+## 7. Risks, edge cases, and mitigations
+## 8. Open questions
+## 9. Future work (post-scope)
+```
+
+**Key rules:**
+- Open with **Purpose** and relative links to PRD + design
+- **Audit** the current repo state — what exists, what must change (tables)
+- **Architecture decisions** with rationale, not just instructions
+- **Phased plan** with exit criteria per phase — each phase is demoable
+- Include a **suggested PR sequence** when the plan spans multiple PRs
+- Tickets derived from this plan go in `thoughts/tickets/` with a `README.md` index

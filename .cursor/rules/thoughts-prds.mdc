@@ -1,0 +1,39 @@
+---
+description: Format and conventions for PRDs in thoughts/prds/
+globs: thoughts/prds/**
+alwaysApply: false
+---
+
+# PRD conventions
+
+## File naming
+
+`MM-DD-YYYY-topic-prd.md` (e.g. `04-03-2026-swc-church-app-prd.md`)
+
+## Required structure
+
+```markdown
+# Title
+
+**Version:** v1.0
+**Last Updated:** Month DD, YYYY
+**Author:** Name
+**Status:** Draft | Active | Completed
+
+---
+
+## 1. Goal
+## 2. Current State
+## 3. Requirements
+...numbered major sections with ## N.N subsections...
+
+## N. Open Questions
+```
+
+**Key rules:**
+- Use numbered top-level sections (`## 1.`, `## 2.`) and numbered subsections (`## 1.1`)
+- Use tables for structured data (APIs, scope, checklists)
+- Reference external URLs inline; use section symbols (e.g. **§16**) for internal cross-refs
+- End with an **Open Questions** section for unresolved decisions
+- If the PRD has UX surface, note that a design doc is needed and link to it once created
+- If tickets are defined inline, extract them to `thoughts/tickets/` when implementation begins

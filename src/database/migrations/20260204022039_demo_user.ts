@@ -4,7 +4,7 @@ import { bytesToHex, randomBytes } from '@noble/hashes/utils.js'
 import type { PoolClient } from 'pg'
 
 const DEMO_ID = 'demo-user-id'
-const DEMO_EMAIL = 'demo@takeout.tamagui.dev'
+const DEMO_EMAIL = 'demo@stroudsburgwesleyan.org'
 const DEMO_NAME = 'Demo User'
 const DEMO_PASSWORD = 'demopassword123'
 

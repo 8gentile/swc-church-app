@@ -5,5 +5,5 @@
  * this file re-exports all query modules - while this breaks tree-shaking,
  * queries are typically small and few in number even in larger apps.
  */
-export * as todo from '../queries/todo'
+export * as events from '../queries/events'
 export * as user from '../queries/user'

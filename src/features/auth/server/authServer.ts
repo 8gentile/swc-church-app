@@ -12,6 +12,30 @@ import { afterCreateUser } from './afterCreateUser'
 
 console.info(`[better-auth] server`, BETTER_AUTH_SECRET.slice(0, 3), BETTER_AUTH_URL)
 
+const googleOAuth =
+  process.env.GOOGLE_CLIENT_ID?.trim() && process.env.GOOGLE_CLIENT_SECRET?.trim()
+    ? {
+        clientId: process.env.GOOGLE_CLIENT_ID.trim(),
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET.trim(),
+      }
+    : undefined
+
+const appleOAuth =
+  process.env.APPLE_CLIENT_ID?.trim() && process.env.APPLE_CLIENT_SECRET?.trim()
+    ? {
+        clientId: process.env.APPLE_CLIENT_ID.trim(),
+        clientSecret: process.env.APPLE_CLIENT_SECRET.trim(),
+      }
+    : undefined
+
+const socialProviders =
+  googleOAuth || appleOAuth
+    ? {
+        ...(googleOAuth ? { google: googleOAuth } : {}),
+        ...(appleOAuth ? { apple: appleOAuth } : {}),
+      }
+    : undefined
+
 export const authServer = betterAuth({
   // using BETTER_AUTH_URL instead of baseUrl
 
@@ -25,6 +49,8 @@ export const authServer = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+
+  ...(socialProviders ? { socialProviders } : {}),
 
   trustedOrigins: [
     // match dev, prod, tauri

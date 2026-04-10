@@ -1,99 +1,38 @@
-import { Link, router } from 'one'
-import { memo, useState } from 'react'
-import { H3, Separator, Sheet, Spacer, View, XStack, YStack } from 'tamagui'
+import { router } from 'one'
+import { memo } from 'react'
+import { H3, Separator, Sheet, XStack, YStack } from 'tamagui'
 
-import { useAuth } from '~/features/auth/client/authClient'
 import { useLogout } from '~/features/auth/useLogout'
 import { Logo } from '~/interface/app/Logo'
-import { Avatar } from '~/interface/avatars/Avatar'
-import { Button } from '~/interface/buttons/Button'
-import { ScrollHeader } from '~/interface/headers/ScrollHeader'
 import { DoorIcon } from '~/interface/icons/phosphor/DoorIcon'
 import { GearIcon } from '~/interface/icons/phosphor/GearIcon'
-import { ListIcon } from '~/interface/icons/phosphor/ListIcon'
-import { PageContainer } from '~/interface/layout/PageContainer'
 import { ThemeSwitch } from '~/interface/theme/ThemeSwitch'
 
-import { NavigationTabs } from './NavigationTabs'
+import { useAuth } from '~/features/auth/client/authClient'
+import { Avatar } from '~/interface/avatars/Avatar'
 
-export const MainHeader = () => {
-  const { user } = useAuth()
-  return (
-    <ScrollHeader>
-      <PageContainer>
-        <YStack width="100%" py="$2.5">
-          <XStack position="relative" width="100%" px="$2" items="center">
-            <XStack gap="$2" items="center">
-              <Link href="/" aria-label="Home">
-                <Logo height={20} />
-              </Link>
-            </XStack>
+import type { ReactNode } from 'react'
 
-            <Spacer flex={1} />
-
-            <XStack
-              position="absolute"
-              inset={0}
-              pointerEvents="none"
-              items="center"
-              justify="center"
-            >
-              <View pointerEvents="auto">
-                <NavigationTabs />
-              </View>
-            </XStack>
-
-            <XStack gap="$2.5" items="center" display="none" $md={{ display: 'flex' }}>
-              {user && (
-                <Button circular cursor="pointer">
-                  <Avatar
-                    disableBorder
-                    size={28}
-                    image={user.image}
-                    name={user.name ?? 'User'}
-                  />
-                </Button>
-              )}
-
-              <ThemeSwitch />
-              <Button
-                circular
-                onPress={() => router.push('/home/settings')}
-                icon={<GearIcon size={18} />}
-                aria-label="Settings"
-              />
-            </XStack>
-
-            <MainHeaderMenu />
-          </XStack>
-        </YStack>
-      </PageContainer>
-    </ScrollHeader>
-  )
+type MainHeaderMenuProps = {
+  open: boolean
+  onOpenChange: (open: boolean) => void
+  trigger: ReactNode
 }
 
-export const MainHeaderMenu = memo(() => {
+export const MainHeaderMenu = memo(({ open, onOpenChange, trigger }: MainHeaderMenuProps) => {
   const { user } = useAuth()
-  const [open, setOpen] = useState(false)
   const { logout } = useLogout()
 
   const handleLogout = () => {
     void logout()
-    setOpen(false)
+    onOpenChange(false)
   }
   return (
     <>
-      <Button
-        variant="transparent"
-        circular
-        icon={<ListIcon size="$1" />}
-        aria-label="Menu"
-        onPress={() => setOpen(true)}
-        $md={{ display: 'none' }}
-      />
+      {trigger}
       <Sheet
         open={open}
-        onOpenChange={setOpen}
+        onOpenChange={onOpenChange}
         transition="medium"
         modal
         dismissOnSnapToBottom
@@ -126,7 +65,7 @@ export const MainHeaderMenu = memo(() => {
                 pressStyle={{ bg: '$color4' }}
                 cursor="pointer"
                 onPress={() => {
-                  setOpen(false)
+                  onOpenChange(false)
                   router.push('/home/settings')
                 }}
               >

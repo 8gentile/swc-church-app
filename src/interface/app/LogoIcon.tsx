@@ -34,7 +34,7 @@ export const LogoIcon = ({ size = 24 }: { size?: number }) => {
           <Stop stopColor="#ECECEC" offset="100%" />
         </LinearGradient>
       </Defs>
-      <G id="takeout-custom" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
+      <G id="logo-icon" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
         <G id="Group-2-Copy" transform="translate(6.000000, 1.000000)">
           <Polygon
             id="Path"

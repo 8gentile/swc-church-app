@@ -36,8 +36,9 @@ async function ensureZeroPublication() {
     if (!rows.length) return
     const tableList = rows.map((r: any) => `"${r.tablename}"`).join(', ')
     await client.query('DROP PUBLICATION IF EXISTS zero_takeout')
-    await client.query(`CREATE PUBLICATION zero_takeout FOR TABLE ${tableList}`)
-    console.info(`[migrate] created publication zero_takeout for ${rows.length} tables`)
+    await client.query('DROP PUBLICATION IF EXISTS zero_swc')
+    await client.query(`CREATE PUBLICATION zero_swc FOR TABLE ${tableList}`)
+    console.info(`[migrate] created publication zero_swc for ${rows.length} tables`)
   } finally {
     client.release()
     await pool.end()

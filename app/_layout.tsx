@@ -31,7 +31,7 @@ export function Layout() {
             <TamaguiRootProvider>
               <SafeAreaProvider>
                 {process.env.VITE_PLATFORM === 'web' ? (
-                  <YStack flex={1}>
+                  <YStack flex={1} width="100%" maxW="100%" style={{ minHeight: '100dvh' }}>
                     <Slot />
                   </YStack>
                 ) : (

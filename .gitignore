@@ -35,6 +35,8 @@ dist
 .env.production.local
 .env.backup
 .env.ios
+.env.wsl.local
+.env.docker
 
 .expo
 

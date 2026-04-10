@@ -1,0 +1,38 @@
+---
+description: Format and conventions for design docs in thoughts/designs/
+globs: thoughts/designs/**
+alwaysApply: false
+---
+
+# Design doc conventions
+
+## Prerequisite
+
+A design doc requires an existing PRD in `thoughts/prds/`. Link to it in the opening paragraph.
+
+## File naming
+
+`MM-DD-YYYY-topic.md` (e.g. `04-04-2026-app-shell-layout.md`)
+
+## Required structure
+
+```markdown
+# Title (design)
+
+Companion to the PRD ([link](../prds/MM-DD-YYYY-topic-prd.md)). Brief description of what this design covers.
+
+---
+
+## Purpose
+## [Component/Area sections with tables and behavior descriptions]
+## Implementation note (current repo vs PRD)
+```
+
+**Key rules:**
+- Open with a one-liner linking to the PRD and stating scope
+- Use **tables** for tab order, component behavior, responsive specs
+- Describe interaction patterns (tap, scroll, navigation) not pixel values
+- Reference PRD sections by symbol (e.g. "PRD section 5.4")
+- Include a **Native vs web** section when behavior diverges
+- End with an **Implementation note** bridging current repo state to target
+- Use Tamagui token names (`$background`, `$color2`, `$space`) not raw values

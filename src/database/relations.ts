@@ -36,10 +36,6 @@ export const relations = defineRelations(schema, (r) => ({
       from: r.userPublic.id,
       to: r.userState.userId,
     }),
-    todos: r.many.todo({
-      from: r.userPublic.id,
-      to: r.todo.userId,
-    }),
   },
 
   userState: {
@@ -49,10 +45,16 @@ export const relations = defineRelations(schema, (r) => ({
     }),
   },
 
-  todo: {
+  // --- event tables ---
+
+  eventSignup: {
     user: r.one.userPublic({
-      from: r.todo.userId,
+      from: r.eventSignup.userId,
       to: r.userPublic.id,
+    }),
+    event: r.one.eventCache({
+      from: r.eventSignup.instanceId,
+      to: r.eventCache.instanceId,
     }),
   },
 }))

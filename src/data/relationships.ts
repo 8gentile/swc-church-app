@@ -2,24 +2,11 @@ import { relationships } from '@rocicorp/zero'
 
 import * as tables from './generated/tables'
 
-export const userRelationships = relationships(tables.userPublic, ({ many, one }) => ({
+export const userRelationships = relationships(tables.userPublic, ({ one }) => ({
   state: one({
     sourceField: ['id'],
     destSchema: tables.userState,
     destField: ['userId'],
-  }),
-  todos: many({
-    sourceField: ['id'],
-    destSchema: tables.todo,
-    destField: ['userId'],
-  }),
-}))
-
-export const todoRelationships = relationships(tables.todo, ({ one }) => ({
-  user: one({
-    sourceField: ['userId'],
-    destSchema: tables.userPublic,
-    destField: ['id'],
   }),
 }))
 
@@ -31,8 +18,21 @@ export const userStateRelationships = relationships(tables.userState, ({ one }) 
   }),
 }))
 
+export const eventSignupRelationships = relationships(tables.eventSignup, ({ one }) => ({
+  user: one({
+    sourceField: ['userId'],
+    destSchema: tables.userPublic,
+    destField: ['id'],
+  }),
+  event: one({
+    sourceField: ['instanceId'],
+    destSchema: tables.eventCache,
+    destField: ['instanceId'],
+  }),
+}))
+
 export const allRelationships = [
   userRelationships,
-  todoRelationships,
   userStateRelationships,
+  eventSignupRelationships,
 ]

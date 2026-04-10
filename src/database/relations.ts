@@ -44,4 +44,17 @@ export const relations = defineRelations(schema, (r) => ({
       to: r.userPublic.id,
     }),
   },
+
+  // --- event tables ---
+
+  eventSignup: {
+    user: r.one.userPublic({
+      from: r.eventSignup.userId,
+      to: r.userPublic.id,
+    }),
+    event: r.one.eventCache({
+      from: r.eventSignup.instanceId,
+      to: r.eventCache.instanceId,
+    }),
+  },
 }))

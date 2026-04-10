@@ -36,11 +36,6 @@ export function getWordpressOrigin(): string | undefined {
   return typeof o === 'string' && isHttpUrl(o) ? o.replace(/\/$/, '') : undefined
 }
 
-export function getWordpressEventsPageId(): string | undefined {
-  const id = import.meta.env.WORDPRESS_EVENTS_PAGE_ID
-  return typeof id === 'string' && id.length > 0 ? id : undefined
-}
-
 export function getWordpressAboutPageId(): string | undefined {
   const id = import.meta.env.WORDPRESS_ABOUT_PAGE_ID
   return typeof id === 'string' && id.length > 0 ? id : undefined

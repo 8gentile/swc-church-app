@@ -7,7 +7,6 @@ interface ImportMetaEnv {
   readonly YOUTUBE_API_KEY?: string
   readonly YOUTUBE_CHANNEL_ID?: string
   readonly WORDPRESS_ORIGIN?: string
-  readonly WORDPRESS_EVENTS_PAGE_ID?: string
   readonly WORDPRESS_ABOUT_PAGE_ID?: string
   readonly WORDPRESS_ABOUT_PAGE_SLUG?: string
 }

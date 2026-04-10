@@ -314,11 +314,53 @@ Set up daily `pg_dump` cron + 14-day retention. Optionally configure Spaces sync
 ### Ticket 6: Monitoring & alerts
 Enable DO monitoring, set CPU/disk alerts, add uptime check on the HTTPS endpoint.
 
+### Ticket 7: Native app → server URL wiring
+Fix `urls.ts` to use a consistent env var for release builds (currently split between `ONE_SERVER_URL` and `VITE_SERVER`). Update `eas.json` with production `env` blocks. Set EAS secrets for the production server domain. See [App Store PRD §15](../prds/04-10-2026-app-store-deployment-prd.md) for the full EAS env configuration.
+
 ---
 
-## 14. Open Questions
+## 14. Native App Client Integration
 
-1. **Domain**: Use `app.stroudsburgwesleyan.org` or a different subdomain? Who controls DNS?
+The web version is dev/test only — **the production clients are iOS and Android apps** built via EAS Build. The Droplet server must support these native app connections:
+
+### 14.1 Connection channels
+
+| Channel | Protocol | Server endpoint | Native app connects via |
+|---------|----------|----------------|------------------------|
+| API (auth, data) | HTTPS | `https://app.stroudsburgwesleyan.org/api/*` | `ONE_SERVER_URL` env var baked at EAS build time |
+| Zero sync | WSS | `wss://sync.stroudsburgwesleyan.org` | `VITE_ZERO_HOSTNAME` env var baked at EAS build time |
+
+### 14.2 How the native app resolves URLs
+
+The native app bundle is compiled by EAS Build (Metro bundler, not Vite). Environment variables must be set as **EAS secrets** or in `eas.json` `env` blocks so they are inlined into the JS bundle at build time.
+
+Three code paths currently reference server URLs:
+
+| File | Var used | Purpose |
+|------|----------|---------|
+| `src/features/auth/client/authFetch.ts` | `process.env.ONE_SERVER_URL` | Auth API base URL (throws if missing) |
+| `src/constants/urls.ts` (`SERVER_URL`) | `process.env.VITE_SERVER` | General API base URL (falls back to `takeout.tamagui.dev`) |
+| `src/constants/urls.ts` (`ZERO_SERVER_URL`) | `process.env.VITE_ZERO_HOSTNAME` | Zero sync URL (falls back to `zero.tamagui.dev`) |
+
+**Problem:** `authFetch` uses `ONE_SERVER_URL` while `urls.ts` uses `VITE_SERVER` — two different vars for the same server. The `VITE_SERVER` var is not defined anywhere in the project. Both Takeout fallback URLs must be replaced with the church domain.
+
+### 14.3 Required fix
+
+Align `urls.ts` to use `ONE_SERVER_URL` in release builds (same var that `authFetch` uses). Remove the `VITE_SERVER` indirection. Update fallbacks from `takeout.tamagui.dev` / `zero.tamagui.dev` to the church production domain. See the [technical plan](../plans/04-10-2026-digitalocean-caddy-deploy-technical-plan.md) for implementation details.
+
+### 14.4 Server requirements for native clients
+
+The Caddy + One.js server must handle:
+
+- **CORS**: Native apps make requests from arbitrary origins. One.js API routes must accept requests without an `Origin` header (native HTTP clients don't send one) or with the app's custom scheme (`swc-church://`).
+- **Cookie handling**: Better Auth sets session cookies. `authFetch` sends Bearer tokens instead, so cookies are less critical for native, but `ZERO_MUTATE_FORWARD_COOKIES` and `ZERO_QUERY_FORWARD_COOKIES` must work for Zero mutations from native clients.
+- **WebSocket upgrade**: Caddy must transparently proxy WebSocket connections on the `sync` subdomain. Native Zero client connects directly — no browser CORS restrictions apply to WebSocket.
+
+---
+
+## 15. Open Questions
+
+1. **Domain**: Use `app.stroudsburgwesleyan.org` or a different subdomain?
 2. **Zero subdomain**: Route WebSocket through path-based proxy (`/zero/*`) or separate subdomain (`sync.stroudsburgwesleyan.org`)?
 3. **CI/CD**: Automate deploys from `main` in v1, or keep manual SSH-based deploys?
 4. **Managed DB**: Start with Dockerized Postgres or pay for DigitalOcean Managed Database ($15/mo) for automatic backups/failover?

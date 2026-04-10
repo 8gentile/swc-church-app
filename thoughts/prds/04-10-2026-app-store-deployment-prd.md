@@ -123,11 +123,19 @@ Additional changes:
     },
     "preview": {
       "distribution": "internal",
-      "env": { "APP_VARIANT": "preview" }
+      "env": {
+        "APP_VARIANT": "preview",
+        "ONE_SERVER_URL": "https://app.stroudsburgwesleyan.org",
+        "VITE_ZERO_HOSTNAME": "sync.stroudsburgwesleyan.org"
+      }
     },
     "production": {
       "autoIncrement": true,
-      "env": { "APP_VARIANT": "production" }
+      "env": {
+        "APP_VARIANT": "production",
+        "ONE_SERVER_URL": "https://app.stroudsburgwesleyan.org",
+        "VITE_ZERO_HOSTNAME": "sync.stroudsburgwesleyan.org"
+      }
     }
   },
   "submit": {
@@ -154,7 +162,32 @@ Set via `eas secret:create` (not stored in repo):
 |--------|---------|
 | `BREEZE_API_KEY` | Breeze ChMS API key |
 | `BREEZE_SUBDOMAIN` | Breeze instance subdomain |
-| `ONE_SERVER_URL` | Production server URL |
+| `YOUTUBE_API_KEY` | YouTube Data API v3 key |
+| `BETTER_AUTH_SECRET` | Auth session signing secret |
+| `POSTMARK_SERVER_TOKEN` | Transactional email service token |
+
+Note: `ONE_SERVER_URL` and `VITE_ZERO_HOSTNAME` are set in `eas.json` `env` blocks (not secrets) because they are not sensitive — they are public URLs baked into the app bundle.
+
+### 5.3 Native App → Server URL Wiring
+
+**Critical dependency:** The native app must know the production server URL at build time. These values are inlined into the JS bundle by the Metro bundler during `eas build`.
+
+Three code paths reference server URLs in the native app:
+
+| File | Env var | What it does |
+|------|---------|-------------|
+| `src/features/auth/client/authFetch.ts` | `ONE_SERVER_URL` | Auth API base URL — **throws if missing** |
+| `src/constants/urls.ts` → `SERVER_URL` | `VITE_SERVER` | General API base URL — falls back to `takeout.tamagui.dev` |
+| `src/constants/urls.ts` → `ZERO_SERVER_URL` | `VITE_ZERO_HOSTNAME` | Zero sync WebSocket URL — falls back to `zero.tamagui.dev` |
+
+**Problem:** `authFetch` uses `ONE_SERVER_URL` while `urls.ts` uses a different var (`VITE_SERVER`) for the same server. `VITE_SERVER` is not defined anywhere in the project. The Takeout fallback domains must be replaced.
+
+**Required code fix (before first EAS production build):**
+1. Update `urls.ts` to use `ONE_SERVER_URL` instead of `VITE_SERVER` in the release build path
+2. Replace `takeout.tamagui.dev` fallbacks with the church production domain (or remove fallbacks entirely so missing config fails loudly)
+3. Replace `zero.tamagui.dev` fallback with the church Zero sync domain
+
+See [Deploy PRD §14](../prds/04-10-2026-digitalocean-caddy-deploy-prd.md) for server-side integration details.
 
 ---
 
@@ -353,16 +386,19 @@ Enroll in Apple Developer Program (org) and Google Play Console. Apply for D-U-N
 ### Ticket 2: App Branding Assets
 Design production app icon (1024x1024), adaptive icon foreground, and splash screen logo. Get approval from pastor/staff.
 
-### Ticket 3: App Config & Bundle IDs
+### Ticket 3: Server URL wiring for native builds
+Fix `urls.ts` to use `ONE_SERVER_URL` consistently (not `VITE_SERVER`). Remove `takeout.tamagui.dev` / `zero.tamagui.dev` fallbacks. Update `eas.json` with `env` blocks containing `ONE_SERVER_URL` and `VITE_ZERO_HOSTNAME` for preview and production profiles. **Must be done before first EAS production build.**
+
+### Ticket 4: App Config & Bundle IDs
 Update `app.config.ts` with church name, bundle IDs, branding colors, cleaned-up permissions. Update `eas.json` with submit configuration.
 
-### Ticket 4: Store Listing Content
+### Ticket 5: Store Listing Content
 Write app description, prepare 4-6 screenshots per platform with device frames. Write and publish privacy policy.
 
-### Ticket 5: TestFlight / Internal Testing
+### Ticket 6: TestFlight / Internal Testing
 Run first EAS build, distribute via TestFlight (iOS) and Play Internal Testing (Android) to pastor and staff for validation.
 
-### Ticket 6: Production Submission
+### Ticket 7: Production Submission
 Submit to both stores, respond to any review feedback, coordinate launch announcement with church communications.
 
 ---

@@ -4,6 +4,16 @@ import { defineQuery, defineQueries } from '@rocicorp/zero'
 import * as v from 'valibot'
 import * as Queries from './groupedQueries'
 
+const events = {
+  allEvents: defineQuery(v.optional(v.object({})), ({ args }) => Queries.events.allEvents()),
+  mySignups: defineQuery(
+    v.object({
+      userId: v.string(),
+    }),
+    ({ args }) => Queries.events.mySignups(args),
+  ),
+}
+
 const user = {
   userById: defineQuery(
     v.object({
@@ -20,5 +30,6 @@ const user = {
 }
 
 export const queries = defineQueries({
+  events,
   user,
 })

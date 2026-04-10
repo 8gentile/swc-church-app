@@ -33,15 +33,3 @@ export async function fetchWordPressPageBySlug(slug: string): Promise<WordPressP
   const pages = (await res.json()) as WordPressPage[]
   return pages[0] ?? null
 }
-
-/** Extract iframe src URLs from WordPress page HTML. */
-export function extractIframeSrcs(html: string): string[] {
-  const re = /<iframe[^>]+src="([^"]+)"/gi
-  const urls: string[] = []
-  let m: RegExpExecArray | null
-  while ((m = re.exec(html)) !== null) {
-    const src = m[1]!.replace(/&#0?38;/g, '&')
-    urls.push(src)
-  }
-  return urls
-}

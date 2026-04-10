@@ -1,8 +1,8 @@
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import { ScrollView } from 'react-native'
 import {
   isWeb,
   Paragraph,
-  ScrollView,
   Separator,
   SizableText,
   Spinner,
@@ -92,100 +92,104 @@ export function AboutTabContent() {
   const churchName = getChurchDisplayName()
   const origin = getWordpressOrigin()
 
-  const topPad = isWeb ? '$5' : insets.top + 12
+  const topPad = isWeb ? '$3' : insets.top + 8
 
-  const content = (
-    <YStack flex={1} width="100%" maxW="100%" bg="$background">
-      <PageContainer flex={1} maxW={960} pt={topPad} pb="$6">
-        <H1 size="$8" fontWeight="700" mb="$5">
-          About
-        </H1>
-
-        {/* Service Times */}
-        <InfoCard>
-          <H3 size="$6" fontWeight="600">
-            Service Times
-          </H3>
-          {loading ? (
-            <YStack py="$4" items="center">
-              <Spinner size="small" />
-            </YStack>
-          ) : error ? (
-            <Paragraph color="$color11" size="$4">
-              {error}
-            </Paragraph>
-          ) : page ? (
-            <ServiceTimesSection html={page.content.rendered} />
-          ) : null}
-        </InfoCard>
-
-        <YStack height="$1" />
-
-        {/* Location */}
-        <InfoCard>
-          <H3 size="$6" fontWeight="600">
-            Location
-          </H3>
-          <Paragraph size="$4" color="$color11">
-            {churchName}
+  const scrollContent = (
+    <YStack gap="$3" pb="$6">
+      {/* Service Times */}
+      <InfoCard>
+        <H3 size="$6" fontWeight="600">
+          Service Times
+        </H3>
+        {loading ? (
+          <YStack py="$4" items="center">
+            <Spinner size="small" />
+          </YStack>
+        ) : error ? (
+          <Paragraph color="$color11" size="$4">
+            {error}
           </Paragraph>
-          <Paragraph size="$4" color="$color11">
-            535 Stroud Street{'\n'}Stroudsburg, PA 18360
-          </Paragraph>
-          <Button
-            size="$3"
-            mt="$1"
-            onPress={() =>
-              void openExternalUrl(
-                'https://maps.google.com/?q=535+Stroud+Street,+Stroudsburg,+PA+18360'
-              )
-            }
-          >
-            Open in Maps
-          </Button>
-        </InfoCard>
+        ) : page ? (
+          <ServiceTimesSection html={page.content.rendered} />
+        ) : null}
+      </InfoCard>
 
-        <YStack height="$1" />
+      {/* Location */}
+      <InfoCard>
+        <H3 size="$6" fontWeight="600">
+          Location
+        </H3>
+        <Paragraph size="$4" color="$color11">
+          {churchName}
+        </Paragraph>
+        <Paragraph size="$4" color="$color11">
+          535 Stroud Street{'\n'}Stroudsburg, PA 18360
+        </Paragraph>
+        <Button
+          size="$3"
+          mt="$1"
+          onPress={() =>
+            void openExternalUrl(
+              'https://maps.google.com/?q=535+Stroud+Street,+Stroudsburg,+PA+18360'
+            )
+          }
+        >
+          Open in Maps
+        </Button>
+      </InfoCard>
 
-        {/* Quick Links */}
-        <InfoCard>
-          <H3 size="$6" fontWeight="600">
-            Links
-          </H3>
-          <Separator />
-          {origin ? (
-            <>
-              <LinkRow label="Church Website" url={origin} />
-              <Separator />
-            </>
-          ) : null}
-          <LinkRow
-            label="Facebook"
-            url="https://www.facebook.com/groups/stroudsburgwesleyan"
-          />
-          <Separator />
-          <LinkRow
-            label="YouTube"
-            url="https://www.youtube.com/@stroudsburgwesleyanchurch8704"
-          />
-          <Separator />
-          <LinkRow label="Contact Us" url="https://www.stroudsburgwesleyan.org/contact-us-2/" />
-        </InfoCard>
-      </PageContainer>
+      {/* Quick Links */}
+      <InfoCard>
+        <H3 size="$6" fontWeight="600">
+          Links
+        </H3>
+        <Separator />
+        {origin ? (
+          <>
+            <LinkRow label="Church Website" url={origin} />
+            <Separator />
+          </>
+        ) : null}
+        <LinkRow
+          label="Facebook"
+          url="https://www.facebook.com/groups/stroudsburgwesleyan"
+        />
+        <Separator />
+        <LinkRow
+          label="YouTube"
+          url="https://www.youtube.com/@stroudsburgwesleyanchurch8704"
+        />
+        <Separator />
+        <LinkRow label="Contact Us" url="https://www.stroudsburgwesleyan.org/contact-us-2/" />
+      </InfoCard>
     </YStack>
   )
 
-  if (isWeb) {
-    return (
-      <YStack flex={1} overflow="scroll">
-        {content}
-      </YStack>
-    )
-  }
-
   return (
-    <ScrollView flex={1} showsVerticalScrollIndicator={false}>
-      {content}
-    </ScrollView>
+    <YStack flex={1} width="100%" maxW="100%" bg="$background">
+      <PageContainer flex={1} maxW={960}>
+        {/* Sticky header */}
+        <YStack pt={topPad} pb="$2" bg="$background">
+          <H1 size="$8" fontWeight="700">
+            About
+          </H1>
+        </YStack>
+
+        {/* Scrollable content */}
+        {isWeb ? (
+          <YStack flex={1} overflow="scroll">
+            {scrollContent}
+          </YStack>
+        ) : (
+          <ScrollView
+            style={{ flex: 1 }}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{ paddingBottom: insets.bottom + 8 }}
+          >
+            {scrollContent}
+          </ScrollView>
+        )}
+      </PageContainer>
+    </YStack>
   )
 }

@@ -11,7 +11,7 @@ applications with React Native.
 
 This project builds the **Stroudsburg Wesleyan Church** app on top of Takeout Free—mostly as a **convenient universal shell** (Tamagui + One + React Native for web/iOS/Android). Product requirements, APIs, and phased work are in [`thoughts/prds/04-03-2026-swc-church-app-prd.md`](thoughts/prds/04-03-2026-swc-church-app-prd.md).
 
-**Church-specific config** (`YOUTUBE_*`, `WORDPRESS_*`, `ENGAGE_GIVE_URL`, etc.) lives in **`.env`** (gitignored) and **`.env.production.example`** — see PRD **§7.5** and **§16**.
+**Church-specific config** (`YOUTUBE_*`, `WORDPRESS_*`, `ENGAGE_GIVE_URL`, `BREEZE_*`, etc.) lives in **`.env`** (gitignored) and **`.env.production.example`** — see PRD **§7.5** and **§16**. Events are powered by the **Breeze ChMS API** via server-side proxy routes (`/api/breeze/*`).
 
 | From this template | Church prototype (MVP) | Keep for later scale |
 |--------------------|-------------------------|----------------------|
@@ -201,16 +201,17 @@ bun migrate
 
 ### Church App Variables (client-side, via `vite.config.ts` envPrefix)
 
-| Variable | Tab | Required | Description |
-|----------|-----|----------|-------------|
-| `CHURCH_DISPLAY_NAME` | All | No | App title (defaults to "Stroudsburg Wesleyan Church") |
-| `ENGAGE_GIVE_URL` | Give | Yes | CDM+ Engage giving portal URL (opens in system browser) |
-| `YOUTUBE_API_KEY` | Sermons | Yes | Google Cloud API key (restrict to YouTube Data API v3) |
-| `YOUTUBE_CHANNEL_ID` | Sermons | Yes | YouTube channel ID for sermon uploads + live streams |
-| `WORDPRESS_ORIGIN` | Events, About | Yes | WordPress site base URL (e.g. `https://www.stroudsburgwesleyan.org`) |
-| `WORDPRESS_EVENTS_PAGE_ID` | Events | Yes | WP page ID containing Breeze calendar embeds |
-| `WORDPRESS_ABOUT_PAGE_ID` | About | Yes* | WP page ID for service times / about content |
-| `WORDPRESS_ABOUT_PAGE_SLUG` | About | Alt* | Alternative: WP page slug instead of ID |
+| Variable | Tab | Side | Required | Description |
+|----------|-----|------|----------|-------------|
+| `CHURCH_DISPLAY_NAME` | All | Client | No | App title (defaults to "Stroudsburg Wesleyan Church") |
+| `ENGAGE_GIVE_URL` | Give | Client | Yes | CDM+ Engage giving portal URL (opens in system browser) |
+| `YOUTUBE_API_KEY` | Sermons | Client | Yes | Google Cloud API key (restrict to YouTube Data API v3) |
+| `YOUTUBE_CHANNEL_ID` | Sermons | Client | Yes | YouTube channel ID for sermon uploads + live streams |
+| `WORDPRESS_ORIGIN` | About | Client | Yes | WordPress site base URL (e.g. `https://www.stroudsburgwesleyan.org`) |
+| `WORDPRESS_ABOUT_PAGE_ID` | About | Client | Yes* | WP page ID for service times / about content |
+| `WORDPRESS_ABOUT_PAGE_SLUG` | About | Client | Alt* | Alternative: WP page slug instead of ID |
+| `BREEZE_SUBDOMAIN` | Events | Server | Yes | Breeze ChMS subdomain (e.g. `stroudsburgwesleyan`) |
+| `BREEZE_API_KEY` | Events | Server | Yes | Breeze ChMS API key (admin secret — never expose to client) |
 
 \* Provide either `WORDPRESS_ABOUT_PAGE_ID` or `WORDPRESS_ABOUT_PAGE_SLUG`.
 

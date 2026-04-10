@@ -23,7 +23,8 @@ export default {
   envPrefix: ['VITE_', 'ENGAGE_', 'YOUTUBE_', 'WORDPRESS_', 'CHURCH_'],
 
   server: {
-    allowedHosts: ['host.docker.internal'],
+    host: true,
+    allowedHosts: ['host.docker.internal', 'app'],
   },
 
   optimizeDeps: {

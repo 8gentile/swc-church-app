@@ -9,6 +9,7 @@ import { useLiveBroadcast } from '~/features/church/youtube/useLiveBroadcast'
 import { useSermonsFeed } from '~/features/church/youtube/useSermonsFeed'
 import type { YouTubePlaylistItem } from '~/features/church/youtube/types'
 import { Button } from '~/interface/buttons/Button'
+import { Input } from '~/interface/forms/Input'
 import { Pressable } from '~/interface/buttons/Pressable'
 import { Image } from '~/interface/image/Image'
 import { PageContainer } from '~/interface/layout/PageContainer'
@@ -36,6 +37,12 @@ function useIsOnline(): boolean {
     }
   }, [])
   return online
+}
+
+function matchesSearch(title: string, query: string): boolean {
+  const words = query.toLowerCase().split(/\s+/).filter(Boolean)
+  const lower = title.toLowerCase()
+  return words.every((w) => lower.includes(w))
 }
 
 function SermonRow({ item }: { item: YouTubePlaylistItem }) {
@@ -87,6 +94,12 @@ export function SermonsTabContent() {
   const hasConfig = !!(getYoutubeApiKey() && getYoutubeChannelId())
   const { liveVideoId } = useLiveBroadcast()
   const { items, loading, loadingMore, refreshing, error, hasMore, reload, loadMore } = useSermonsFeed()
+  const [search, setSearch] = useState('')
+
+  const filtered = useMemo(() => {
+    if (!search.trim()) return items
+    return items.filter((item) => matchesSearch(item.snippet.title, search))
+  }, [items, search])
 
   const listHeader = useMemo(() => {
     if (!liveVideoId) return null
@@ -109,9 +122,11 @@ export function SermonsTabContent() {
     )
   }, [liveVideoId])
 
+  const topPad = isWeb ? '$3' : insets.top + 8
+
   if (!hasConfig) {
     return (
-      <YStack flex={1} pt={isWeb ? '$5' : insets.top + 12} width="100%" maxW="100%">
+      <YStack flex={1} pt={topPad} width="100%" maxW="100%">
         <PageContainer maxW={960}>
           <H1 size="$8" fontWeight="700" mb="$3">
             Sermons
@@ -128,7 +143,7 @@ export function SermonsTabContent() {
 
   if (!online) {
     return (
-      <YStack flex={1} pt={isWeb ? '$5' : insets.top + 12} px="$4" maxW={960} mx="auto" width="100%">
+      <YStack flex={1} pt={topPad} px="$4" maxW={960} mx="auto" width="100%">
         <H1 size="$8" fontWeight="700" mb="$3">
           Sermons
         </H1>
@@ -142,11 +157,24 @@ export function SermonsTabContent() {
 
   return (
     <YStack flex={1} width="100%" maxW="100%" bg="$background">
-      <YStack flex={1} pt={isWeb ? '$3' : insets.top + 8} pb={isWeb ? '$4' : insets.bottom + 8}>
+      <YStack flex={1} pb={isWeb ? '$4' : insets.bottom + 8}>
         <PageContainer flex={1} maxW={960}>
-          <H1 size="$8" fontWeight="700" mb="$4">
-            Sermons
-          </H1>
+          {/* Sticky header */}
+          <YStack pt={topPad} pb="$2" bg="$background">
+            <H1 size="$8" fontWeight="700" mb="$3">
+              Sermons
+            </H1>
+            <Input
+              placeholder="Search sermons..."
+              value={search}
+              onChangeText={setSearch}
+              height={40}
+              size="$3"
+              bg="$color2"
+              borderColor="$borderColor"
+              rounded="$3"
+            />
+          </YStack>
 
           {loading && items.length === 0 ? (
             <YStack py="$8" items="center">
@@ -155,7 +183,7 @@ export function SermonsTabContent() {
           ) : (
             <FlatList
               style={{ flex: 1 }}
-              data={items}
+              data={filtered}
               keyExtractor={(row) => row.snippet.resourceId.videoId}
               ListHeaderComponent={listHeader}
               renderItem={({ item }) => <SermonRow item={item} />}
@@ -163,7 +191,7 @@ export function SermonsTabContent() {
                 <RefreshControl refreshing={refreshing} onRefresh={() => reload()} enabled={!loading} />
               }
               onEndReached={() => {
-                if (hasMore && !loadingMore) void loadMore()
+                if (hasMore && !loadingMore && !search.trim()) void loadMore()
               }}
               onEndReachedThreshold={0.4}
               ListFooterComponent={
@@ -176,7 +204,7 @@ export function SermonsTabContent() {
               ListEmptyComponent={
                 !loading ? (
                   <Paragraph color="$color11">
-                    {error ?? 'No sermons found.'}
+                    {search.trim() ? 'No sermons match your search.' : (error ?? 'No sermons found.')}
                   </Paragraph>
                 ) : null
               }

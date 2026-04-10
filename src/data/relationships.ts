@@ -18,4 +18,21 @@ export const userStateRelationships = relationships(tables.userState, ({ one }) 
   }),
 }))
 
-export const allRelationships = [userRelationships, userStateRelationships]
+export const eventSignupRelationships = relationships(tables.eventSignup, ({ one }) => ({
+  user: one({
+    sourceField: ['userId'],
+    destSchema: tables.userPublic,
+    destField: ['id'],
+  }),
+  event: one({
+    sourceField: ['instanceId'],
+    destSchema: tables.eventCache,
+    destField: ['instanceId'],
+  }),
+}))
+
+export const allRelationships = [
+  userRelationships,
+  userStateRelationships,
+  eventSignupRelationships,
+]

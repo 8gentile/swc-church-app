@@ -1,6 +1,6 @@
 # Ticket 02 — Sermons tab: YouTube archive, live banner, and player
 
-**Status:** Draft  
+**Status:** Completed  
 **Depends on:** Ticket 01 (routes and config exist)  
 **Plan:** [`../plans/04-04-2026-church-app-prototype-technical-plan.md`](../plans/04-04-2026-church-app-prototype-technical-plan.md) (Phase 1)  
 **PRD:** [`../prds/04-03-2026-swc-church-app-prd.md`](../prds/04-03-2026-swc-church-app-prd.md) §5.1–5.2, §7.1

@@ -1,5 +1,6 @@
 # Technical plan: Tamagui Takeout → SWC Church App prototype
 
+**Status:** Completed  
 **Purpose:** Single implementation roadmap to evolve this repository from the **Tamagui Takeout Free** template into the **Stroudsburg Wesleyan Church** anonymous-first prototype described in:
 
 - Product: [`thoughts/prds/04-03-2026-swc-church-app-prd.md`](../prds/04-03-2026-swc-church-app-prd.md)

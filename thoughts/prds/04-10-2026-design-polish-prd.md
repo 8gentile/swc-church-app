@@ -1,7 +1,7 @@
 # Design Polish — Icons & CTA Buttons (PRD)
 
-> Status: **Draft**
-> Date: 04-10-2026
+**Status:** Draft  
+**Last Updated:** April 10, 2026  
 
 ## 1. Problem
 

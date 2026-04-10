@@ -1,6 +1,6 @@
 # Ticket 05 — Polish: cross-cutting UX, env consistency, branding, and documentation
 
-**Status:** Draft  
+**Status:** Completed  
 **Depends on:** Tickets 01–04 (can start some items in parallel once 01 lands)  
 **Plan:** [`../plans/04-04-2026-church-app-prototype-technical-plan.md`](../plans/04-04-2026-church-app-prototype-technical-plan.md) §6–9  
 **PRD:** [`../prds/04-03-2026-swc-church-app-prd.md`](../prds/04-03-2026-swc-church-app-prd.md) §8–9, §11

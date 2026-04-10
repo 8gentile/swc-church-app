@@ -1,5 +1,6 @@
 # Technical plan: DigitalOcean + Caddy production deployment
 
+**Status:** Draft  
 **Purpose:** Implementation plan for deploying the SWC Church App to a single DigitalOcean Droplet running Docker Compose with Caddy as the TLS-terminating reverse proxy.
 
 - Product: [PRD](../prds/04-10-2026-digitalocean-caddy-deploy-prd.md)

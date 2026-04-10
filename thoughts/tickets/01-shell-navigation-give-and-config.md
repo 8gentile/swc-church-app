@@ -1,6 +1,6 @@
 # Ticket 01 — Shell, four-tab navigation, Give (center action), and config foundation
 
-**Status:** Draft  
+**Status:** Completed  
 **Depends on:** — (start here)  
 **Plan:** [`../plans/04-04-2026-church-app-prototype-technical-plan.md`](../plans/04-04-2026-church-app-prototype-technical-plan.md) (Phase 0)  
 **PRD:** [`../prds/04-03-2026-swc-church-app-prd.md`](../prds/04-03-2026-swc-church-app-prd.md) §4, §5.4, §7.5  

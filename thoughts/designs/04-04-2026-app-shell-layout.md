@@ -1,5 +1,7 @@
 # App shell layout (design)
 
+**Status:** Completed  
+
 Companion to the PRD (Navigation, section 4). Describes how the **mobile-first shell** is structured so implementation matches product intent: sermons, events, giving, and about—without inventing a separate information architecture.
 
 ---

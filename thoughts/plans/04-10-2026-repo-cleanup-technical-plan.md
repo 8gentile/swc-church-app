@@ -1,5 +1,6 @@
 # Technical plan: Tamagui Takeout template cleanup
 
+**Status:** Completed  
 **Purpose:** Strip Takeout template boilerplate and rebrand the repository to **SWC Church App**, keeping only what supports the product requirements: auth, server + database backend, iOS + Android native apps, and (post-MVP) web.
 
 - Product: [SWC Church App PRD](../prds/04-03-2026-swc-church-app-prd.md)

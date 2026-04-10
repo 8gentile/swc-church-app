@@ -1,6 +1,6 @@
 # Ticket 04 — About tab: WordPress page (service times, description, location)
 
-**Status:** Draft  
+**Status:** Completed  
 **Depends on:** Ticket 01 (route + `WORDPRESS_ORIGIN`); reuses rendering approach from Ticket 03 where possible  
 **Plan:** [`../plans/04-04-2026-church-app-prototype-technical-plan.md`](../plans/04-04-2026-church-app-prototype-technical-plan.md) (Phase 3)  
 **PRD:** [`../prds/04-03-2026-swc-church-app-prd.md`](../prds/04-03-2026-swc-church-app-prd.md) §5.5, §7.2

@@ -1,6 +1,6 @@
 # Ticket 03 — Events tab: WordPress events content and external sign-up links
 
-**Status:** Draft  
+**Status:** Completed  
 **Depends on:** Ticket 01 (route + env for `WORDPRESS_ORIGIN`, `WORDPRESS_EVENTS_PAGE_ID`)  
 **Plan:** [`../plans/04-04-2026-church-app-prototype-technical-plan.md`](../plans/04-04-2026-church-app-prototype-technical-plan.md) (Phase 2)  
 **PRD:** [`../prds/04-03-2026-swc-church-app-prd.md`](../prds/04-03-2026-swc-church-app-prd.md) §5.3, §7.2, §16.3

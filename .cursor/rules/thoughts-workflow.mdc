@@ -47,6 +47,19 @@ During a conversation, if you recognize any of these signals, pause and create t
 - "What are the tasks?" → check for tickets; if missing, derive from the plan in `thoughts/tickets/`
 - "I'm not sure which approach / library / API" → draft research in `thoughts/research/`
 
+## Status tracking
+
+Every artifact **must** include a `**Status:**` field in its header metadata. Valid statuses:
+
+| Status | Meaning |
+|--------|---------|
+| **Draft** | Written but not yet being acted on |
+| **Active** | Currently being implemented or referenced as the living spec |
+| **Completed** | Fully implemented or no longer actionable |
+| **Superseded** | Replaced by a newer version (link to replacement) |
+
+Update the status as work progresses. When auditing `thoughts/`, use status to quickly identify what's done and what's outstanding.
+
 ## Cross-referencing
 
 Every artifact **must** link to its upstream dependencies using relative paths:

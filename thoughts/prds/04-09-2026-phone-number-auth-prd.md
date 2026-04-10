@@ -3,6 +3,7 @@
 **Version:** v1.0  
 **Last Updated:** April 2026  
 **Author:** Nicholas Gentile  
+**Status:** Draft  
 **Parent PRD:** `thoughts/prds/04-03-2026-swc-church-app-prd.md` (§6 — Authentication & identity)
 
 ---

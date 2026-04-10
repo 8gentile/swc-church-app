@@ -3,6 +3,7 @@
 **Version:** v2.1 (Auth intent: identity for signup; no church app DB)  
 **Last Updated:** April 2026  
 **Author:** Nicholas Gentile  
+**Status:** Active  
 
 ---
 
